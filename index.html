@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustArray Google Ads ROI Calculator</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+min-height: 100vh;
+padding: 20px;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+background: rgba(255, 255, 255, 0.95);
+border-radius: 20px;
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+overflow: hidden;
+backdrop-filter: blur(10px);
+}
+
+.header {
+background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+color: white;
+padding: 40px;
+text-align: center;
+}
+
+.header h1 {
+font-size: 2.5rem;
+margin-bottom: 10px;
+font-weight: 600;
+}
+
+.header p {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+
+.content {
+padding: 40px;
+}
+
+.calculator-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 40px;
+margin-bottom: 40px;
+}
+
+.input-section {
+background: #f8f9fa;
+padding: 30px;
+border-radius: 15px;
+border: 1px solid #e9ecef;
+}
+
+.input-section h3 {
+color: #2c3e50;
+margin-bottom: 25px;
+font-size: 1.3rem;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.input-group {
+margin-bottom: 20px;
+}
+
+.input-group label {
+display: block;
+margin-bottom: 8px;
+color: #495057;
+font-weight: 500;
+}
+
+.input-group input, .input-group select {
+width: 100%;
+padding: 12px 16px;
+border: 2px solid #dee2e6;
+border-radius: 8px;
+font-size: 16px;
+transition: border-color 0.3s;
+}
+
+.input-group input:focus, .input-group select:focus {
+outline: none;
+border-color: #3498db;
+}
+
+.slider-container {
+margin: 10px 0;
+}
+
+.slider {
+width: 100%;
+height: 6px;
+border-radius: 3px;
+background: #ddd;
+outline: none;
+-webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+appearance: none;
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background: #3498db;
+cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background: #3498db;
+cursor: pointer;
+border: none;
+}
+
+.results-section {
+grid-column: span 2;
+background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+color: white;
+padding: 30px;
+border-radius: 15px;
+margin-top: 20px;
+}
+
+.results-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+margin-bottom: 30px;
+}
+
+.metric-card {
+background: rgba(255, 255, 255, 0.15);
+padding: 20px;
+border-radius: 12px;
+text-align: center;
+backdrop-filter: blur(5px);
+}
+
+.metric-value {
+font-size: 2rem;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.metric-label {
+font-size: 0.9rem;
+opacity: 0.9;
+}
+
+.timeline-section {
+background: white;
+color: #2c3e50;
+padding: 30px;
+border-radius: 15px;
+margin-top: 20px;
+}
+
+.timeline-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 20px;
+margin-top: 20px;
+}
+
+.month-card {
+background: #f8f9fa;
+padding: 20px;
+border-radius: 12px;
+text-align: center;
+border: 2px solid #e9ecef;
+}
+
+.month-card.positive {
+border-color: #27ae60;
+background: rgba(39, 174, 96, 0.1);
+}
+
+.assumptions {
+background: #fff3cd;
+border: 1px solid #ffeaa7;
+border-radius: 10px;
+padding: 20px;
+margin-top: 30px;
+}
+
+.assumptions h4 {
+color: #856404;
+margin-bottom: 15px;
+}
+
+.assumptions ul {
+color: #856404;
+padding-left: 20px;
+}
+
+.cta-section {
+background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+color: white;
+padding: 30px;
+border-radius: 15px;
+margin-top: 30px;
+text-align: center;
+}
+
+.cta-button {
+background: white;
+color: #e74c3c;
+padding: 15px 30px;
+border-radius: 25px;
+text-decoration: none;
+font-weight: bold;
+display: inline-block;
+margin-top: 15px;
+transition: transform 0.3s;
+}
+
+.cta-button:hover {
+transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+.calculator-grid {
+grid-template-columns: 1fr;
+}
+
+.results-section {
+grid-column: span 1;
+}
+
+.timeline-grid {
+grid-template-columns: 1fr;
+}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>🎯 TrustArray Google Ads ROI Calculator</h1>
+<p>USA Market Lead Generation Projections for Litigation Support Services</p>
+</div>
+
+<div class="content">
+<div class="calculator-grid">
+<div class="input-section">
+<h3>📊 Campaign Parameters</h3>
+
+<div class="input-group">
+<label for="adSpend">Monthly Ad Spend</label>
+<input type="range" id="adSpend" class="slider" min="2500" max="5000" value="3500" step="100">
+<div style="text-align: center; margin-top: 10px; font-weight: bold; font-size: 1.2rem;">
+$<span id="adSpendValue">3,500</span>
+</div>
+</div>
+
+<div class="input-group">
+<label for="costPerLead">Cost Per Lead (CPL) - USA Market</label>
+<select id="costPerLead">
+<option value="200">Pessimistic - $200 (Highly competitive keywords)</option>
+<option value="135">Conservative - $135 (US Legal Average)</option>
+<option value="115" selected>Optimized - $115 (With good targeting)</option>
+<option value="95">Best Case - $95 (Excellent optimization)</option>
+</select>
+</div>
+
+<div class="input-group">
+<label for="conversionRate">Lead to Client Conversion Rate</label>
+<select id="conversionRate">
+<option value="0.04">Conservative - 4% (Cold leads)</option>
+<option value="0.07" selected>Industry Average - 7% (Qualified leads)</option>
+<option value="0.10">Optimized - 10% (High-intent targeting)</option>
+</select>
+</div>
+</div>
+
+<div class="input-section">
+<h3>💰 Revenue Parameters</h3>
+
+<div class="input-group">
+<label for="avgProjectValue">Average Project Value (Initial)</label>
+<select id="avgProjectValue">
+<option value="8000">Small eDiscovery - $8,000</option>
+<option value="18000" selected>Medium Litigation Support - $18,000</option>
+<option value="35000">Large Document Review - $35,000</option>
+<option value="65000">Enterprise eDiscovery - $65,000</option>
+</select>
+</div>
+
+<div class="input-group">
+<label for="repeatBusiness">Customer Lifetime Value Multiplier</label>
+<select id="repeatBusiness">
+<option value="1.1">Conservative - 1.1x (10% repeat business)</option>
+<option value="1.3" selected>Realistic - 1.3x (30% additional LTV)</option>
+<option value="1.6">Optimistic - 1.6x (60% additional LTV)</option>
+<option value="2.2">Exceptional - 2.2x (120% additional LTV)</option>
+</select>
+</div>
+
+<div class="input-group">
+<label for="profitMargin">Profit Margin</label>
+<select id="profitMargin">
+<option value="0.25">Conservative - 25%</option>
+<option value="0.35" selected>Industry Average - 35%</option>
+<option value="0.45">Optimized - 45%</option>
+</select>
+</div>
+</div>
+
+<div class="results-section">
+<h3 style="text-align: center; margin-bottom: 25px; font-size: 1.5rem;">📈 3-Month Campaign Projections</h3>
+
+<div class="results-grid">
+<div class="metric-card">
+<div class="metric-value" id="totalLeads">0</div>
+<div class="metric-label">Total Leads Generated</div>
+</div>
+
+<div class="metric-card">
+<div class="metric-value" id="totalClients">0</div>
+<div class="metric-label">New Clients Acquired</div>
+</div>
+
+<div class="metric-card">
+<div class="metric-value" id="totalRevenue">$0</div>
+<div class="metric-label">Projected Revenue</div>
+</div>
+
+<div class="metric-card">
+<div class="metric-value" id="totalProfit">$0</div>
+<div class="metric-label">Net Profit</div>
+</div>
+
+<div class="metric-card">
+<div class="metric-value" id="roi">0%</div>
+<div class="metric-label">Return on Investment</div>
+</div>
+
+<div class="metric-card">
+<div class="metric-value" id="breakEven">0</div>
+<div class="metric-label">Days to Break Even</div>
+</div>
+</div>
+</div>
+
+<div class="timeline-section">
+<h3 style="text-align: center; margin-bottom: 20px;">📅 Month-by-Month Breakdown</h3>
+
+<div class="timeline-grid">
+<div class="month-card" id="month1">
+<h4>Month 1</h4>
+<div style="margin: 10px 0;">
+<strong>Leads:</strong> <span id="m1Leads">0</span><br>
+<strong>Clients:</strong> <span id="m1Clients">0</span><br>
+<strong>Revenue:</strong> <span id="m1Revenue">$0</span><br>
+<strong>Profit:</strong> <span id="m1Profit">$0</span>
+</div>
+</div>
+
+<div class="month-card" id="month2">
+<h4>Month 2</h4>
+<div style="margin: 10px 0;">
+<strong>Leads:</strong> <span id="m2Leads">0</span><br>
+<strong>Clients:</strong> <span id="m2Clients">0</span><br>
+<strong>Revenue:</strong> <span id="m2Revenue">$0</span><br>
+<strong>Profit:</strong> <span id="m2Profit">$0</span>
+</div>
+</div>
+
+<div class="month-card" id="month3">
+<h4>Month 3</h4>
+<div style="margin: 10px 0;">
+<strong>Leads:</strong> <span id="m3Leads">0</span><br>
+<strong>Clients:</strong> <span id="m3Clients">0</span><br>
+<strong>Revenue:</strong> <span id="m3Revenue">$0</span><br>
+<strong>Profit:</strong> <span id="m3Profit">$0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="assumptions">
+<h4>📝 Key Assumptions & USA Market Insights</h4>
+<ul>
+<li><strong>USA Legal Market CPL:</strong> Ranges from $95-200+ per lead. Premium legal niches like eDiscovery can reach $200+ due to high competition and specialized targeting</li>
+<li><strong>Conversion Rates:</strong> B2B legal services typically see 4-10% conversion rates, lower than B2C due to longer decision cycles</li>
+<li><strong>Conservative CLV:</strong> Legal clients provide 1.1-1.6x initial project value through limited repeat business in specialized litigation support</li>
+<li><strong>TrustArray's USA Focus:</strong> eDiscovery and litigation support projects typically range $8K-$65K per engagement</li>
+<li><strong>Market Reality:</strong> USA legal market is highly competitive, requiring 45-90 days for typical campaign optimization</li>
+<li><strong>Profit Margins:</strong> Litigation support services maintain 25-40% margins due to specialized expertise and technology costs</li>
+<li><strong>Geographic Targeting:</strong> Campaigns will focus on major US legal markets (NYC, LA, Chicago, DC, Boston, etc.)</li>
+<li><strong>Pessimistic Scenario:</strong> High-competition keywords (e.g., "eDiscovery services", "litigation support") may cost $200+ per lead initially</li>
+</ul>
+</div>
+
+<div class="cta-section">
+<h3>🚀 Ready to Dominate the USA Legal Market?</h3>
+<p>Conservative projections show positive ROI potential within 60-90 days. With TrustArray's specialized litigation support services and strategic USA market targeting, Google Ads can generate consistent, high-quality leads from major legal markets.</p>
+<a href="#" class="cta-button" onclick="generateProposal()">Generate USA Market Proposal</a>
+</div>
+</div>
+</div>
+
+<script>
+function formatNumber(num) {
+return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function formatCurrency(num) {
+return "$" + formatNumber(Math.round(num));
+}
+
+function formatPercentage(num) {
+return Math.round(num) + "%";
+}
+
+function updateCalculations() {
+const adSpend = parseFloat(document.getElementById('adSpend').value);
+const costPerLead = parseFloat(document.getElementById('costPerLead').value);
+const conversionRate = parseFloat(document.getElementById('conversionRate').value);
+const avgProjectValue = parseFloat(document.getElementById('avgProjectValue').value);
+const repeatBusiness = parseFloat(document.getElementById('repeatBusiness').value);
+const profitMargin = parseFloat(document.getElementById('profitMargin').value);
+
+// Calculate monthly metrics
+const monthlyLeads = adSpend / costPerLead;
+const monthlyClients = monthlyLeads * conversionRate;
+const monthlyRevenue = monthlyClients * avgProjectValue * repeatBusiness;
+const monthlyProfit = monthlyRevenue * profitMargin - adSpend;
+
+// Calculate 3-month totals
+const totalAdSpend = adSpend * 3;
+const totalLeads = monthlyLeads * 3;
+const totalClients = monthlyClients * 3;
+const totalRevenue = monthlyRevenue * 3;
+const totalProfit = monthlyProfit * 3;
+const roi = ((totalProfit) / totalAdSpend) * 100;
+
+// Calculate break-even days
+const dailyAdSpend = adSpend / 30;
+const dailyProfit = monthlyProfit / 30;
+const breakEven = dailyProfit > 0 ? Math.max(1, Math.round(adSpend / (dailyProfit + dailyAdSpend))) : 999;
+
+// Update display
+document.getElementById('adSpendValue').textContent = formatNumber(adSpend);
+document.getElementById('totalLeads').textContent = Math.round(totalLeads);
+document.getElementById('totalClients').textContent = Math.round(totalClients);
+document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+document.getElementById('totalProfit').textContent = formatCurrency(totalProfit);
+document.getElementById('roi').textContent = formatPercentage(roi);
+document.getElementById('breakEven').textContent = breakEven > 365 ? "365+" : breakEven;
+
+// Update monthly breakdown
+const months = [1, 2, 3];
+months.forEach(month => {
+document.getElementById(`m${month}Leads`).textContent = Math.round(monthlyLeads);
+document.getElementById(`m${month}Clients`).textContent = Math.round(monthlyClients);
+document.getElementById(`m${month}Revenue`).textContent = formatCurrency(monthlyRevenue);
+document.getElementById(`m${month}Profit`).textContent = formatCurrency(monthlyProfit);
+
+const monthCard = document.getElementById(`month${month}`);
+if (monthlyProfit > 0) {
+monthCard.classList.add('positive');
+} else {
+monthCard.classList.remove('positive');
+}
+});
+}
+
+function generateProposal() {
+const adSpend = document.getElementById('adSpend').value;
+const totalRevenue = document.getElementById('totalRevenue').textContent;
+const roi = document.getElementById('roi').textContent;
+
+alert(`📊 PROPOSAL SUMMARY FOR TRUSTARRAY\n\n` +
+`💰 Monthly Investment: $${formatNumber(adSpend)}\n` +
+`📈 3-Month Projected Revenue: ${totalRevenue}\n` +
+`🎯 Expected ROI: ${roi}\n\n` +
+`Next Steps:\n` +
+`✅ Campaign setup and keyword research\n` +
+`✅ Landing page optimization\n` +
+`✅ Conversion tracking implementation\n` +
+`✅ Weekly performance reviews\n\n` +
+`Contact us to begin your lead generation campaign!`);
+}
+
+// Event listeners
+document.getElementById('adSpend').addEventListener('input', updateCalculations);
+document.getElementById('costPerLead').addEventListener('change', updateCalculations);
+document.getElementById('conversionRate').addEventListener('change', updateCalculations);
+document.getElementById('avgProjectValue').addEventListener('change', updateCalculations);
+document.getElementById('repeatBusiness').addEventListener('change', updateCalculations);
+document.getElementById('profitMargin').addEventListener('change', updateCalculations);
+
+// Initial calculation
+updateCalculations();
+</script>
+</body>
+</html>
